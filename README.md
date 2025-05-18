@@ -57,7 +57,14 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     sudo poweroff
     ```
 
-8.  [**user**@**dom0**]() Create Mumble Server AppVM _(`murmurd-dvm`)_
+8.  [**user**@**dom0**]() Create Mumble Server _AppVM_ _(`murmurd-dvm`)_
+
+    <details>
+    <summary><b>Step Details</b></summary>
+
+    > This VM is setup as a _DispVM template_ for the named _DispVM_ that'll be running the server.
+
+    </details>
 
     ```bash
     qvm-create murmurd-dvm -t murmurd-ws-17 -l black --prop netvm='' --prop template_for_dispvms=True --prop default_dispvm=''
@@ -81,7 +88,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     echo 'rm -f "$HISTFILE"' >> ~/.zshrc
     ```
 
-11. [**user**@**murmurd-dvm**]() Bind Mumble server config and database
+12. [**user**@**murmurd-dvm**]() Bind Mumble server config and database
 
     <details>
     <summary><b>Step Details</b></summary>
@@ -99,28 +106,40 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     2. Create and populate user binding config
 
         ```bash
-        echo "binds+=( '/etc/mumble-server.ini' '/var/lib/mumble-server/mumble-server.sqlite' )" | sudo tee -a /rw/config/qubes-bind-dirs.d/50_user.conf
+        echo "binds+=( '/etc/mumble-server.ini' '/var/lib/mumble-server/mumble-server.sqlite' )" | sudo tee -a /rw/config/qubes-bind-dirs.d/50_user.conf &>/dev/null
+        ```
+    
+    3. Shutdown the VM to complete bindings
+
+        ```bash
+        sudo poweroff
         ```
 
-12. [**user**@**murmurd-dvm**]() Create `whonix_firewall.d` directory
+13. [**user**@**dom0**]() Start `murmurd-dvm` up again
+
+    ```bash
+    setsid qvm-run murmurd-dvm xfce4-terminal &>/dev/null
+    ```
+
+14. [**user**@**murmurd-dvm**]() Create `whonix_firewall.d` directory
 
     ```bash
     sudo mkdir -p /usr/local/etc/whonix_firewall.d
     ```
 
-13. [**user**@**murmurd-dvm**]() Open ports for Mumble server
+15. [**user**@**murmurd-dvm**]() Open ports for Mumble server
 
     ```bash
     echo 'EXTERNAL_OPEN_PORTS+=" 64738 " | sudo tee /usr/local/etc/whonix_firewall.d/50_user.conf &>/dev/null
     ```
 
-14. [**user**@**murmurd-dvm**]() Reload Whonix Firewall
+16. [**user**@**murmurd-dvm**]() Reload Whonix Firewall
 
     ```bash
     sudo whonix_firewall
     ```
 
-15. [**user**@**murmurd-dvm**]() Reconfigure Mumble Server
+17. [**user**@**murmurd-dvm**]() Reconfigure Mumble Server
 
     <details>
     <summary><b>Recommendations</b></summary>
@@ -135,7 +154,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     sudo dpkg-reconfigure mumble-server
     ```
 
-16. [**user**@**murmurd-dvm**]() Update Mumble server config
+18. [**user**@**murmurd-dvm**]() Update Mumble server config
 
     <details>
     <summary><b>Recommendations</b></summary>
