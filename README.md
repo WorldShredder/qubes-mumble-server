@@ -30,7 +30,13 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     setsid qvm-run murmurd-ws-17 xfce4-terminal &>/dev/null
     ```
 
-4. [**user**@**murmurd-ws-17**]() Prevent `mumble-server.service` from running in _persistent_ VMs
+4.  [**user**@**murmurd-ws-17**]() Create service directory for `mumble-server`
+
+    ```bash
+    sudo mkdir -p /etc/systemd/system/mumble-server.service.d
+    ```
+
+5. [**user**@**murmurd-ws-17**]() Prevent `mumble-server.service` from running in _persistent_ VMs
 
     ```bash
     cat << 'EOF' > /etc/systemd/system/mumble-server.service.d/override.conf
@@ -39,16 +45,10 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     EOF
     ```
 
-5.  [**user**@**murmurd-ws-17**]() Install `mumble-server` package
+6.  [**user**@**murmurd-ws-17**]() Install `mumble-server` package
 
     ```bash
     sudo apt install -y mumble-server
-    ```
-
-6.  [**user**@**murmurd-ws-17**]() Create service directory for `mumble-server`
-
-    ```bash
-    sudo mkdir -p /etc/systemd/system/mumble-server.service.d
     ```
 
 7.  [**user**@**murmurd-ws-17**]() Shutdown the template
@@ -115,15 +115,16 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 15. [**user**@**murmurd-dvm**]() Update Mumble server config
 
     <details>
-    <summary><b>Step Details</b></summary>
+    <summary><b>Recommendations</b></summary>
 
     > - Set the `serverpassword` to something secure, e.g., `serverpassword=DTGCEK7Qq8Zon6Z`
-    > - Additional config settings can be found in an archived [Murmurd guide](https://archive.ph/Vvm2C)
+    > - Disable `allowping` setting because it exposes server information _(maybe not needed?)_
+    > - See additional settings in this archived [Murmurd guide](https://archive.ph/Vvm2C)
 
     </details>
 
     ```bash
-    sudo nano /etc/mumble-server.ini
+    sudo vim /etc/mumble-server.ini
     ```
 
 
