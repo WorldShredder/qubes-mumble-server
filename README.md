@@ -14,7 +14,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 
     2. Update new template preferences
 
-        1. `qvm-prefs murmurd-ws-17 include_in_backups False`
+        1. `qvm-prefs murmurd-ws-17 include_in_backups False` _(optional)_
         2. `qvm-prefs murmurd-ws-17 maxmem 2000`
         3. `qvm-prefs murmurd-ws-17 memory 200`
 
@@ -75,29 +75,52 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     setsid qvm-run murmurd-dvm xfce4-terminal &>/dev/null
     ```
 
-11. [**user**@**murmurd-dvm**]() Create binding dirs for Mumble
+11. [**user**@**murmurd-dvm**]() Prevent persistent bash history in `.zsh` _(recommended)_
 
     ```bash
+    echo 'rm -f "$HISTFILE"' >> ~/.zshrc
+    ```
 
-11. [**user**@**murmurd-dvm**]() Create `whonix_firewall.d` directory
+11. [**user**@**murmurd-dvm**]() Bind Mumble server config and database
+
+    <details>
+    <summary><b>Step Details</b></summary>
+
+    > This will make your `mumble-server.ini` and `mumble-server.sqlite` files persist in the _DispVM_ template. If you do not do this, your server's settings, channels and registered users will be erased.
+
+    </details>
+
+    1. Create `qubes-bind-dirs.d` directory
+
+        ```bash
+        sudo mkdir -p /rw/config/qubes-bind-dirs.d
+        ```
+
+    2. Create and populate user binding config
+
+        ```bash
+        echo "binds+=( '/etc/mumble-server.ini' '/var/lib/mumble-server/mumble-server.sqlite' )" | sudo tee -a /rw/config/qubes-bind-dirs.d/50_user.conf
+        ```
+
+12. [**user**@**murmurd-dvm**]() Create `whonix_firewall.d` directory
 
     ```bash
     sudo mkdir -p /usr/local/etc/whonix_firewall.d
     ```
 
-12. [**user**@**murmurd-dvm**]() Open ports for Mumble server
+13. [**user**@**murmurd-dvm**]() Open ports for Mumble server
 
     ```bash
     echo 'EXTERNAL_OPEN_PORTS+=" 64738 " | sudo tee /usr/local/etc/whonix_firewall.d/50_user.conf &>/dev/null
     ```
 
-13. [**user**@**murmurd-dvm**]() Reload Whonix Firewall
+14. [**user**@**murmurd-dvm**]() Reload Whonix Firewall
 
     ```bash
     sudo whonix_firewall
     ```
 
-14. [**user**@**murmurd-dvm**]() Reconfigure Mumble Server
+15. [**user**@**murmurd-dvm**]() Reconfigure Mumble Server
 
     <details>
     <summary><b>Recommendations</b></summary>
@@ -112,7 +135,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     sudo dpkg-reconfigure mumble-server
     ```
 
-15. [**user**@**murmurd-dvm**]() Update Mumble server config
+16. [**user**@**murmurd-dvm**]() Update Mumble server config
 
     <details>
     <summary><b>Recommendations</b></summary>
