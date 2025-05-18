@@ -9,7 +9,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     1. Clone `whonix-workstation-17`
     
         ```bash
-        qvm-clone whonix-workstation-17 murmurd-ws-17 --prop include_in_backups=False --prop memory=200 --prop maxmem=2000
+        qvm-clone whonix-workstation-17 murmurd-ws-17
         ```
 
     2. Update new template preferences
