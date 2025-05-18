@@ -6,9 +6,17 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 
 1.  [**user**@**dom0**]() Create Mumble Server Template _(`murmurd-ws-17`)_
 
-    ```bash
-    qvm-clone whonix-workstation-17 murmurd-ws-17 --prop include_in_backups=False --prop memory=200 --prop maxmem=2000
-    ```
+    1. Clone `whonix-workstation-17`
+    
+        ```bash
+        qvm-clone whonix-workstation-17 murmurd-ws-17 --prop include_in_backups=False --prop memory=200 --prop maxmem=2000
+        ```
+
+    2. Update new template preferences
+
+        1. `qvm-prefs murmurd-ws-17 include_in_backups False`
+        2. `qvm-prefs murmurd-ws-17 maxmem 2000`
+        3. `qvm-prefs murmurd-ws-17 memory 200`
 
 2.  [**user**@**dom0**]() Update `murmurd-ws-17`
 
