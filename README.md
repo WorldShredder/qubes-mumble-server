@@ -60,7 +60,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 8.  [**user**@**dom0**]() Create Mumble Server AppVM _(`murmurd-dvm`)_
 
     ```bash
-    qvm-create murmurd-dvm -t murmurd-ws-17 -l black --prop netvm=sys-whonix --prop template_for_dispvms=True --default_dispvm=None
+    qvm-create murmurd-dvm -t murmurd-ws-17 -l black --prop netvm=None --prop template_for_dispvms=True --prop default_dispvm=None
     ```
 
 9.  [**user**@**dom0**]() Enable `appmenus-dispvm` feature in `murmurd-dvm`
@@ -118,6 +118,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     <summary><b>Recommendations</b></summary>
 
     > - Set the `serverpassword` to something secure, e.g., `serverpassword=DTGCEK7Qq8Zon6Z`
+    > - Consider setting `logfile` to empty to prevent any service logs for better security
     > - Disable `allowping` setting because it exposes server information _(maybe not needed?)_
     > - See additional settings in this archived [Murmurd guide](https://archive.ph/Vvm2C)
 
