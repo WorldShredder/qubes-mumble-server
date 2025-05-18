@@ -90,6 +90,10 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 
 12. [**user**@**murmurd-dvm**]() Bind Mumble server config and database
 
+    <!-- 
+    TODO: This step needs testing
+     -->
+
     <details>
     <summary><b>Step Details</b></summary>
 
@@ -103,10 +107,22 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
         sudo mkdir -p /rw/config/qubes-bind-dirs.d
         ```
 
-    2. Create and populate user binding config
+    2. Create and populate user bindings config
 
         ```bash
         echo "binds+=( '/etc/mumble-server.ini' '/var/lib/mumble-server/mumble-server.sqlite' )" | sudo tee -a /rw/config/qubes-bind-dirs.d/50_user.conf &>/dev/null
+        ```
+
+    3. Bind Mumble server database directory
+
+        ```bash
+        sudo mkdir -p /rw/bind-dirs/var/lib/mumble-server
+        ```
+
+    4. Create placeholder for Mumble database
+
+        ```bash
+        sudo touch /rw/bind-dirs/var/lib/mumble-server/mumble-server.sqlite
         ```
     
     3. Shutdown the VM to complete bindings
