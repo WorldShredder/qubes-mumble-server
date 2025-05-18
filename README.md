@@ -7,7 +7,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 1.  [**user**@**dom0**]() Create Mumble Server Template _(`murmurd-ws-17`)_
 
     ```bash
-    qvm-clone whonix-workstation-17 murmurd-ws-17 --prop include_in_backup=False --prop memory=200 --prop maxmem=2000
+    qvm-clone whonix-workstation-17 murmurd-ws-17 --prop include_in_backups=False --prop memory=200 --prop maxmem=2000
     ```
 
 2.  [**user**@**dom0**]() Update `murmurd-ws-17`
@@ -66,6 +66,10 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     ```bash
     setsid qvm-run murmurd-dvm xfce4-terminal &>/dev/null
     ```
+
+11. [**user**@**murmurd-dvm**]() Create binding dirs for Mumble
+
+    ```bash
 
 11. [**user**@**murmurd-dvm**]() Create `whonix_firewall.d` directory
 
