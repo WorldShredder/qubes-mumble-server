@@ -60,7 +60,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 8.  [**user**@**dom0**]() Create Mumble Server AppVM _(`murmurd-dvm`)_
 
     ```bash
-    qvm-create murmurd-dvm -t murmurd-ws-17 -l black --prop netvm=None --prop template_for_dispvms=True --prop default_dispvm=None
+    qvm-create murmurd-dvm -t murmurd-ws-17 -l black --prop netvm='' --prop template_for_dispvms=True --prop default_dispvm=''
     ```
 
 9.  [**user**@**dom0**]() Enable `appmenus-dispvm` feature in `murmurd-dvm`
