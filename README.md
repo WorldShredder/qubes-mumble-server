@@ -30,25 +30,25 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     setsid qvm-run murmurd-ws-17 xfce4-terminal &>/dev/null
     ```
 
-4.  [**user**@**murmurd-ws-17**]() Install `mumble-server` package
+4. [**user**@**murmurd-ws-17**]() Prevent `mumble-server.service` from running in _persistent_ VMs
+
+    ```bash
+    cat << 'EOF' > /etc/systemd/system/mumble-server.service.d/override.conf
+    [Unit]
+    ConditionPathExists=/run/qubes/persistent-none
+    EOF
+    ```
+
+5.  [**user**@**murmurd-ws-17**]() Install `mumble-server` package
 
     ```bash
     sudo apt install -y mumble-server
     ```
 
-5.  [**user**@**murmurd-ws-17**]() Create service directory for `mumble-server`
+6.  [**user**@**murmurd-ws-17**]() Create service directory for `mumble-server`
 
     ```bash
     sudo mkdir -p /etc/systemd/system/mumble-server.service.d
-    ```
-
-6. [**user**@**murmurd-ws-17**]() Prevent `mumble-server.service` from running in _persistent_ VMs
-
-    ```bash
-    cat << 'EOF' > /etc/systemd/system/mumble-server.service.d/override.conf
-    [unit]
-    ConditionPathExists=/run/qubes/persistent-none
-    EOF
     ```
 
 7.  [**user**@**murmurd-ws-17**]() Shutdown the template
