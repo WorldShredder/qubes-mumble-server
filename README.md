@@ -119,13 +119,34 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
         sudo mkdir -p /rw/bind-dirs/var/lib/mumble-server
         ```
 
-    4. Create placeholder for Mumble database
+    4. Create placeholder for Mumble sqlite database
 
-        ```bash
-        sudo touch /rw/bind-dirs/var/lib/mumble-server/mumble-server.sqlite
-        ```
+        <details>
+        <summary><b>Step Details</b></summary>
+
+        > The `mumble-server.sqlite` database does not exist yet, so we must initialize it via the `bind-dir` directory and mirror the expected ownership and file permissions.
+
+        </details>
+
+        1. Create empty file
+        
+            ```bash
+            sudo touch /rw/bind-dirs/var/lib/mumble-server/mumble-server.sqlite
+            ```
+
+        2. Set expected ownership _(`mumble-server`)_
+
+            ```bash
+            sudo chown mumble-server: /var/lib/mumble-server/mumble-server.sqlite
+            ```
+
+        3. Set expected permissions _(`rw-r-----`)_
+
+            ```bash
+            sudo chmod 640 /var/lib/mumble-server/mumble-server.sqlite
+            ```
     
-    3. Shutdown the VM to complete bindings
+    3. Shutdown the VM to finalize bindings
 
         ```bash
         sudo poweroff
