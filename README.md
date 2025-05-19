@@ -137,13 +137,13 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
         2. Set expected ownership _(`mumble-server`)_
 
             ```bash
-            sudo chown mumble-server: /var/lib/mumble-server/mumble-server.sqlite
+            sudo chown mumble-server: /rw/bind-dirs/var/lib/mumble-server/mumble-server.sqlite
             ```
 
         3. Set expected permissions _(`rw-r-----`)_
 
             ```bash
-            sudo chmod 640 /var/lib/mumble-server/mumble-server.sqlite
+            sudo chmod 640 /rw/bind-dirs/var/lib/mumble-server/mumble-server.sqlite
             ```
     
     3. Shutdown the VM to finalize bindings
