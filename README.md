@@ -146,7 +146,7 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 15. [**user**@**murmurd-dvm**]() Open ports for Mumble server
 
     ```bash
-    echo 'EXTERNAL_OPEN_PORTS+=" 64738 " | sudo tee /usr/local/etc/whonix_firewall.d/50_user.conf &>/dev/null
+    echo 'EXTERNAL_OPEN_PORTS+=" 64738 "' | sudo tee -a /usr/local/etc/whonix_firewall.d/50_user.conf &>/dev/null
     ```
 
 16. [**user**@**murmurd-dvm**]() Reload Whonix Firewall
