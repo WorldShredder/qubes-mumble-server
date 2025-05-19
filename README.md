@@ -1,8 +1,11 @@
-MUMBLE SERVER IN QUBES
+# MUMBLE VOIP IN QUBES OS
+
+This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/Mumble_%28software%29) server and client configuration
 
 
-TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
+# Mumble Server Setup
 
+## 1. Create & Configure Mumble Server Template
 
 1.  [**user**@**dom0**]() Create Mumble Server Template _(`murmurd-ws-17`)_
 
@@ -55,6 +58,10 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     ```bash
     sudo poweroff
     ```
+
+<br>
+
+## 2. Create & Configure Mumble Server AppVM & DispVM
 
 8.  [**user**@**dom0**]() Create Mumble Server _AppVM_ _(`murmurd-dvm`)_
 
@@ -211,11 +218,29 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     sudo poweroff
     ```
 
-20. [**user**@**dom0**]() Create Mumble Server _Named DispVM_ _(`murmurd`)_
+20. [**user**@**dom0**]() Create Mumble Server _DispVM_ _(`murmurd`)_
+
+    > <picture>
+    >   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/note.svg">
+    >   <img alt="Note" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/note.svg">
+    > </picture><br>
+    >
+    > This is a _named_ disposable VM. Unlike standard _DispVMs_, a _named_ disposable maintains a constant _internal IP_, which we need in order to configure a Tor hidden service.
+
+    > <picture>
+    >   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/note.svg">
+    >   <img alt="Note" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/note.svg">
+    > </picture><br>
+    >
+    > This is the only VM which can run our Mumble server because it has the `persistent-none` flag, which we made a requirement for the `mumble-server` systemd service.
 
     ```bash
     qvm-create murmurd -t murmurd-dvm -l purple --class DispVM --prop netvm=sys-whonix
     ```
+
+<br>
+
+## 3. Configure Tor Hidden Service For Mumble Server
 
 21. [**user**@**dom0**]() Open a terminal in `sys-whonix`
 
@@ -249,7 +274,8 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     > </details>
 
     ```bash
-    cat << 'EOF' | tee -a /usr/local/etc/torrc.d/50_user.conf &>/dev/null
+    cat << 'EOF' | sudo tee -a /usr/local/etc/torrc.d/50_user.conf &>/dev/null
+
     HiddenServiceDir /var/lib/tor/mumble-server
     HiddenServicePort 64738 MURMURD_QUBE_INTERNAL_IP
     EOF
@@ -279,3 +305,100 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     ```bash
     setsid qvm-start murmurd &>/dev/null
     ```
+
+
+## Optimal Mumble Client Settings
+
+- **Audio Input**
+
+    - **Interface**
+
+        - `Echo Cancellation`: _Multichannel echo cancellation_
+
+    - **Transmission**
+
+        - **Amplitude**
+
+            - `Voice Hold`: _250ms_
+
+            - `Silence Below`: _~30% (may depend on input device)_
+
+            - `Speech Above`: _~50% (may depend on input device)_
+
+    - **Compression**
+
+        - `Quality`: _~13 kb/s_
+
+        - `Audio per packet`: _20ms_
+
+    - **Audio Processing**
+
+        - `Noise Suppression`: _-60 dB (may depend on input device)_
+
+        - `Max. Amplification`: _~2.5  (may depend on input device)_
+
+- **Audio Output**
+
+    - **Audio Output**
+
+        - `Default Jitter Buffer`: _10ms_
+
+        - `Volume`: _Recommended that you start very low and adjust users manually via right-click_
+
+        - `Output Delay`: _20ms-40ms_
+
+- **Network**
+
+    - **Connection**
+
+        - `Force TCP mode`: _Enabled_
+
+            > <picture>
+            > <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/warning.svg">
+            > <img alt="Warning" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/warning.svg">
+            > </picture><br>
+            >
+            > You must enable _TCP mode_, otherwise Mumble will not work. This is because Tor only works over TCP _(confirmed packets)_, while most VOIP protocols communicate over UDP _(streamed packets)_.
+
+        - `Reconnect automatically`: _Disabled (There is no way to stop Mumble from retrying if enabled)_
+
+    - **Proxy**
+
+        > <picture>
+        > <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/warning.svg">
+        > <img alt="Warning" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/warning.svg">
+        > </picture><br>
+        >
+        > While not mandatory, by not applying these proxy settings, your Mumble client will be conntected via Tor's transproxy _(127.0.0.1:9050)_ in `sys-whonix`, which means it will share a Tor circuit with other apps communicating via the transproxy.
+        >
+        > Instead, an isolated _SocksPort_ can be used; in this case is the IM _(instant messanger)_ SocksPort, which isolates unique destination addresses and ports to their own circuit.
+
+        - `Type`: _SOCKS5 proxy_
+        
+        - `Hostname`: _sys-whonix internal ip_
+
+        - `Port`: _9103 (Whonix Instant Messanger SocksPort)_
+
+            <details>
+            <summary><b>Where can I find the internal IP?</b></summary>
+            
+            > - **Via [user@dom0]()**
+            >
+            >     ```bash
+            >     qvm-prefs sys-whonix visible_ip
+            >     ```
+            > - **Via [user@sys-whonix]()**
+            >
+            >     ```bash
+            >     qubesdb-read /qubes-ip
+            >     ```
+            
+            </details>
+    
+    - **Privacy**
+
+        - `Do not send OS information`: _Enabled_
+
+    - **Mumble services**
+
+        - `Submit anonymous statistics`: _Disabled_
