@@ -1,3 +1,4 @@
 # Qubes Mumble Todo
 
-- [ ] Figure out how to do this without requiring a _TemplateVM_, i.e., `murmurd-ws-17`
+- [ ] Figure out an _AppVM_-only method for Mumble server and client, i.e., no `murmurd-ws-17` _TemplateVM_
+- [ ] Provide persistent method for Mumble client config, etc...

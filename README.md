@@ -1,13 +1,43 @@
 # MUMBLE VOIP IN QUBES OS
 
-This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/Mumble_%28software%29) server and client configuration
+Instructions for configuring [Mumble↗](https://en.wikipedia.org/wiki/Mumble_%28software%29) server and client with Tor-routing in [Qubes OS↗](https://qubes-os.org). Both server and client are securely ran in separate _disposable_ [Whonix↗](https://whonix.org) Workstations.
 
+<details>
+<summary><b>What is Mumble?</b></summary>
+
+>Mumble is an Open Source, low-latency and high-quality voice-chat program written on top of Qt and Opus.
+>
+>There are two modules in Mumble; the client (mumble) and the server (mumble-server formerly known as murmur). The client works on Windows, Linux, FreeBSD, OpenBSD, and macOS, while the server should work on anything Qt can be installed on.
+
+</details>
+
+<br>
+
+# Table of Contents
+- [Requirements](#requirements)
+- [Mumble Server Setup](#mumble-server-setup)
+    - [1. Create & Configure Mumble Server TemplateVM](#1-create--configure-mumble-server-templatevm)
+    - [2. Create & Configure Mumble Server AppVM & DispVM](#2-create--configure-mumble-server-appvm--dispvm)
+    - [3. Configure Tor Hidden Service For Mumble Server](#3-configure-tor-hidden-service-for-mumble-server)
+- [Mumble Client Setup](#mumble-client-setup)
+    - [1. Create & Configure Mumble Client TemplateVM](#1-create--configure-mumble-client-templatevm)
+    - [2. Create & Configure Mumble Client DispVM](#2-create--configure-mumble-client-dispvm)
+    - [Optimal Mumble Client Settings](#optimal-mumble-client-settings)
+
+<br>
+
+# Requirements
+- 8Gb Memory _(16Gb or more recommended)_
+- Qubes OS 4.1 or higher w/Whonix VMs installed
+- A moderate understanding of Qubes OS
+
+<br>
 
 # Mumble Server Setup
 
-## 1. Create & Configure Mumble Server Template
+## 1. Create & Configure Mumble Server TemplateVM
 
-1.  [**user**@**dom0**]() Create Mumble Server Template _(`murmurd-ws-17`)_
+1.  [**user**@**dom0**]() Create Mumble server _TemplateVM (`murmurd-ws-17`)_
 
     1. Clone `whonix-workstation-17`
     
@@ -15,7 +45,7 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
         qvm-clone whonix-workstation-17 murmurd-ws-17
         ```
 
-    2. Update new template preferences
+    2. Update new template preferences _(recommended)_
 
         1. `qvm-prefs murmurd-ws-17 maxmem 2000`
         2. `qvm-prefs murmurd-ws-17 memory 200`
@@ -63,7 +93,7 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
 
 ## 2. Create & Configure Mumble Server AppVM & DispVM
 
-8.  [**user**@**dom0**]() Create Mumble Server _AppVM_ _(`murmurd-dvm`)_
+1.  [**user**@**dom0**]() Create Mumble Server _AppVM_ _(`murmurd-dvm`)_
 
     <details>
     <summary><b>Step Details</b></summary>
@@ -76,25 +106,25 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
     qvm-create murmurd-dvm -t murmurd-ws-17 -l black --prop netvm='' --prop template_for_dispvms=True --prop default_dispvm=''
     ```
 
-9.  [**user**@**dom0**]() Enable `appmenus-dispvm` feature in `murmurd-dvm`
+2.  [**user**@**dom0**]() Enable `appmenus-dispvm` feature in `murmurd-dvm`
 
     ```bash
     qvm-features murmurd-dvm appmenus-dispvm 1
     ```
 
-10. [**user**@**dom0**]() Launch `murmurd-dvm`
+3. [**user**@**dom0**]() Launch `murmurd-dvm`
 
     ```bash
     setsid qvm-run murmurd-dvm xfce4-terminal &>/dev/null
     ```
 
-11. [**user**@**murmurd-dvm**]() Prevent persistent bash history in `.zsh` _(recommended)_
+4. [**user**@**murmurd-dvm**]() Prevent persistent bash history in `.zsh` _(recommended)_
 
     ```bash
     echo 'rm -f "$HISTFILE"' >> ~/.zshrc
     ```
 
-12. [**user**@**murmurd-dvm**]() Bind Mumble server config and database
+5. [**user**@**murmurd-dvm**]() Bind Mumble server config and database
 
     <!-- 
     TODO: This step needs testing
@@ -158,31 +188,31 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
         sudo poweroff
         ```
 
-13. [**user**@**dom0**]() Start `murmurd-dvm` up again
+6. [**user**@**dom0**]() Start `murmurd-dvm` up again
 
     ```bash
     setsid qvm-run murmurd-dvm xfce4-terminal &>/dev/null
     ```
 
-14. [**user**@**murmurd-dvm**]() Create `whonix_firewall.d` directory
+7. [**user**@**murmurd-dvm**]() Create `whonix_firewall.d` directory
 
     ```bash
     sudo mkdir -p /usr/local/etc/whonix_firewall.d
     ```
 
-15. [**user**@**murmurd-dvm**]() Open ports for Mumble server
+8. [**user**@**murmurd-dvm**]() Open ports for Mumble server
 
     ```bash
     echo 'EXTERNAL_OPEN_PORTS+=" 64738 "' | sudo tee -a /usr/local/etc/whonix_firewall.d/50_user.conf &>/dev/null
     ```
 
-16. [**user**@**murmurd-dvm**]() Reload Whonix Firewall
+9. [**user**@**murmurd-dvm**]() Reload Whonix Firewall
 
     ```bash
     sudo whonix_firewall
     ```
 
-17. [**user**@**murmurd-dvm**]() Reconfigure Mumble Server
+10. [**user**@**murmurd-dvm**]() Reconfigure Mumble Server
 
     <details>
     <summary><b>Recommendations</b></summary>
@@ -197,7 +227,7 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
     sudo dpkg-reconfigure mumble-server
     ```
 
-18. [**user**@**murmurd-dvm**]() Update Mumble server config
+11. [**user**@**murmurd-dvm**]() Update Mumble server config
 
     <details>
     <summary><b>Recommendations</b></summary>
@@ -205,20 +235,20 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
     > - Set the `serverpassword` to something secure, e.g., `serverpassword=DTGCEK7Qq8Zon6Z`
     > - Consider setting `logfile` to empty to prevent any service logs for better security
     > - Disable `allowping` setting because it exposes server information _(maybe not needed?)_
-    > - See additional settings in this archived [Murmurd guide](https://archive.ph/Vvm2C)
+    > - See additional settings in this archived [Murmurd guide↗](https://archive.ph/Vvm2C)
 
     </details>
 
     ```bash
     sudo vim /etc/mumble-server.ini
     ```
-19. [**user**@**murmurd-dvm**]() Shutdown VM
+12. [**user**@**murmurd-dvm**]() Shutdown VM
 
     ```bash
     sudo poweroff
     ```
 
-20. [**user**@**dom0**]() Create Mumble Server _DispVM_ _(`murmurd`)_
+13. [**user**@**dom0**]() Create Mumble Server _DispVM_ _(`murmurd`)_
 
     > <picture>
     >   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/note.svg">
@@ -242,13 +272,13 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
 
 ## 3. Configure Tor Hidden Service For Mumble Server
 
-21. [**user**@**dom0**]() Open a terminal in `sys-whonix`
+1. [**user**@**dom0**]() Open a terminal in `sys-whonix`
 
     ```bash
     setsid qvm-run sys-whonix xfce4-terminal &>/dev/null
     ```
 
-22. [**user**@**sys-whonix**]() Create a new hidden service in `torrc` _(user config)_
+2. [**user**@**sys-whonix**]() Create a new hidden service in `torrc` _(user config)_
 
     > <picture>
     > <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/warning.svg">
@@ -281,19 +311,19 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
     EOF
     ```
 
-23. [**user**@**sys-whonix**]() Reload Tor Daemon
+3. [**user**@**sys-whonix**]() Reload Tor Daemon
 
     ```bash
     sudo systemctl reload tor
     ```
 
-24. [**user**@**sys-whonix**]() Retrieve Mumble server onion address
+4. [**user**@**sys-whonix**]() Retrieve Mumble server onion address
 
     ```bash
     sudo cat /var/lib/tor/mumble-server/hostname
     ```
 
-25. [**user**@**dom0**]() Start `murmurd` _DispVM_
+5. [**user**@**dom0**]() Start `murmurd` _DispVM_
 
     > <picture>
     >   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/note.svg">
@@ -306,6 +336,101 @@ This repository covers the creation of a [Mumble](https://en.wikipedia.org/wiki/
     setsid qvm-start murmurd &>/dev/null
     ```
 
+<br>
+
+# Mumble Client Setup
+
+## 1. Create & Configure Mumble Client TemplateVM
+
+> <picture>
+>   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/note.svg">
+>   <img alt="Note" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/note.svg">
+> </picture><br>
+>
+> Alternatively, you can install and configure the `mumble` _apt_ package each time you start a disposable instance of `whonix-workstation-XX-dvm`.
+
+1. [**user**@**dom0**]() Create Mumble client _TemplateVM (`mumble-ws-17`)_
+
+    1. Clone `whonix-workstation-17`
+    
+        ```bash
+        qvm-clone whonix-workstation-17 mumble-ws-17
+        ```
+
+    2. Update new template preferences _(recommended)_
+
+        1. `qvm-prefs mumble-ws-17 maxmem 2000`
+        2. `qvm-prefs mumble-ws-17 memory 200`
+
+2.  [**user**@**dom0**]() Update `mumble-ws-17`
+
+    ```bash
+    qubes-vm-update --force-update --targets mumble-ws-17
+    ```
+
+3.  [**user**@**dom0**]() Launch `mumble-ws-17`
+
+    ```bash
+    setsid qvm-run mumble-ws-17 xfce4-terminal &>/dev/null
+    ```
+
+4.  [**user**@**mumble-ws-17**]() Install _apt_ package `mumble`
+
+    ```bash
+    sudo apt install -y mumble
+    ```
+
+5. [**user**@**mumble-ws-17**]() Shutdown template
+
+    ```bash
+    sudo poweroff
+    ```
+
+<br>
+
+## 2. Create & Configure Mumble Client DispVM
+
+1. [**user**@**dom0**]() Create Mumble client _DispVM_
+
+    ```bash
+    qvm-create mumble-dvm -t mumble-ws-17 -l red --prop netvm=sys-whonix --prop template_for_dispvms=true --prop default_dispvm=mumble-dvm
+    ```
+
+2. [**user**@**dom0**]() Enable feature `appmenus-dispvm`
+
+    ```bash
+    qvm-features mumble-dvm appmenus-dispvm 1
+    ```
+
+3. [**user**@**dom0**]() Set label to _purple_
+
+    <details>
+    <summary><b>Step Details</b></summary>
+
+    > There is a bug _(or feature)_ in Qubes where configuring a _DispVM_ which derives its _disposable template_ from itself does not trigger the label icon to change to the _DispVM_ icon. A workaround is to set the label color _after_ creating the VM, which refreshes the icon.
+    
+    </details>
+
+    ```bash
+    qvm-prefs mumble-dvm label purple
+    ```
+
+4. [**user**@**dom0**]() Refresh the _app menu_ of `mumble-dvm`
+
+    <details>
+    <summary><b>Step Details</b></summary>
+
+    > This is requires, otherwise the _app menu_ of `mumble-dvm` will be empty. This is less a bug and more the result of using `qvm-create` and `qvm-prefs` instead of the more technical [Salt↗](https://www.qubes-os.org/doc/salt/) method.
+    
+    </details>
+
+    ```bash
+    qvm-appmenus --update mumble-dvm
+    ```
+
+_todo: add configuration persistence steps_
+
+<br>
 
 ## Optimal Mumble Client Settings
 
