@@ -60,7 +60,7 @@ Instructions for configuring [Mumble↗](https://en.wikipedia.org/wiki/Mumble_%2
 5. [**user**@**murmurd-ws-17**]() Prevent `mumble-server.service` from running in _persistent_ VMs
 
     ```bash
-    cat << 'EOF' > /etc/systemd/system/mumble-server.service.d/override.conf
+    cat << 'EOF' | sudo tee -a /etc/systemd/system/mumble-server.service.d/override.conf &>/dev/null
     [Unit]
     ConditionPathExists=/run/qubes/persistent-none
     EOF
