@@ -2,19 +2,15 @@
 
 Instructions for configuring [Mumble↗](https://en.wikipedia.org/wiki/Mumble_%28software%29) server and client with Tor-routing in [Qubes OS↗](https://qubes-os.org). Both server and client are securely ran in separate _disposable_ [Whonix↗](https://whonix.org) Workstations.
 
-<details>
-<summary><b>What is Mumble?</b></summary>
+> [!IMPORTANT]
+> The Whonix version number _(currently 17)_ is liable to change. If a more recent version is available, e.g., `whonix-workstation-18-dvm`, use that instead by updating commands using the outdated reference.
 
->Mumble is an Open Source, low-latency and high-quality voice-chat program written on top of Qt and Opus.
->
->There are two modules in Mumble; the client (mumble) and the server (mumble-server formerly known as murmur). The client works on Windows, Linux, FreeBSD, OpenBSD, and macOS, while the server should work on anything Qt can be installed on.
+## Requirements
+- 8Gb Memory _(16Gb or more recommended)_
+- Qubes OS 4.1 or higher w/Whonix VMs installed
+- A moderate understanding of Qubes OS
 
-</details>
-
-<br>
-
-# Table of Contents
-- [Requirements](#requirements)
+## Table of Contents
 - [Mumble Server Setup](#mumble-server-setup)
     - [1. Create & Configure Mumble Server TemplateVM](#1-create--configure-mumble-server-templatevm)
     - [2. Create & Configure Mumble Server AppVM & DispVM](#2-create--configure-mumble-server-appvm--dispvm)
@@ -23,13 +19,6 @@ Instructions for configuring [Mumble↗](https://en.wikipedia.org/wiki/Mumble_%2
     - [1. Create & Configure Mumble Client TemplateVM](#1-create--configure-mumble-client-templatevm)
     - [2. Create & Configure Mumble Client DispVM](#2-create--configure-mumble-client-dispvm)
     - [Optimal Mumble Client Settings](#optimal-mumble-client-settings)
-
-<br>
-
-# Requirements
-- 8Gb Memory _(16Gb or more recommended)_
-- Qubes OS 4.1 or higher w/Whonix VMs installed
-- A moderate understanding of Qubes OS
 
 <br>
 
@@ -527,3 +516,11 @@ _todo: add configuration persistence steps_
     - **Mumble services**
 
         - `Submit anonymous statistics`: _Disabled_
+
+<br>
+
+# Resources
+
+- https://www.whonix.org/wiki/Voip#Mumble_Server_Instructions
+- https://forum.qubes-os.org/t/exposing-mumble-server-running-in-qubes-using-wireguard
+- https://www.blunix.com/blog/creating-qubes-os-vms-on-the-command-line.html
