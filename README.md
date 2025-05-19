@@ -14,9 +14,8 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
 
     2. Update new template preferences
 
-        1. `qvm-prefs murmurd-ws-17 include_in_backups False` _(optional)_
-        2. `qvm-prefs murmurd-ws-17 maxmem 2000`
-        3. `qvm-prefs murmurd-ws-17 memory 200`
+        1. `qvm-prefs murmurd-ws-17 maxmem 2000`
+        2. `qvm-prefs murmurd-ws-17 memory 200`
 
 2.  [**user**@**dom0**]() Update `murmurd-ws-17`
 
@@ -208,8 +207,71 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     ```
 
 
-X.  [dom0]() Create Mumble Server Named DispVM _(`murmurd`)_
+19. [**user**@**dom0**]() Create Mumble Server _Named DispVM_ _(`murmurd`)_
 
     ```bash
-    qvm-create murmurd --class DispVM -l purple -t murmurd-dvm
+    qvm-create murmurd -t murmurd-dvm -l purple --class DispVM --prop netvm=sys-whonix
+    ```
+
+20. [**user**@**dom0**]() Open a terminal in `sys-whonix`
+
+    ```bash
+    setsid qvm-run sys-whonix xfce4-terminal &>/dev/null
+    ```
+
+21. [**user**@**sys-whonix**]() Create a new hidden service in `torrc` _(user config)_
+
+    > <picture>
+    > <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/warning.svg">
+    > <img alt="Warning" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/warning.svg">
+    > </picture><br>
+    >
+    > Make sure to replace **`MURMURD_QUBE_INTERNAL_IP`** with the _internal ip_ of the `murmurd` _DispVM_.
+    >
+    > <details>
+    > <summary><b>Where can I find the internal IP?</b></summary>
+    >
+    > > - **Via [user@dom0]()**
+    > >
+    > >     ```bash
+    > >     qvm-prefs murmurd visible_ip
+    > >     ```
+    > > - **Via [user@murmurd]()**
+    > >
+    > >     ```bash
+    > >     qubesdb-read /qubes-ip
+    > >     ```
+    >
+    > </details>
+
+    ```bash
+    cat << 'EOF' | tee -a /usr/local/etc/torrc.d/50_user.conf &>/dev/null
+    HiddenServiceDir /var/lib/tor/mumble-server
+    HiddenServicePort 64738 MURMURD_QUBE_INTERNAL_IP
+    EOF
+    ```
+
+22. [**user**@**sys-whonix**]() Reload Tor Daemon
+
+    ```bash
+    sudo systemctl reload tor
+    ```
+
+23. [**user**@**sys-whonix**]() Retrieve Mumble server onion address
+
+    ```bash
+    sudo cat /var/lib/tor/mumble-server/hostname
+    ```
+
+24. [**user**@**dom0**]() Start `murmurd` _DispVM_
+
+    > <picture>
+    >   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/note.svg">
+    >   <img alt="Note" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/note.svg">
+    > </picture><br>
+    >
+    > This will effectively start your Mumble server. Once the VM is live, you should be able to connect to the server via the `mumble-server` hidden service onion URL.
+
+    ```bash
+    setsid qvm-start murmurd &>/dev/null
     ```
