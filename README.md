@@ -3,7 +3,7 @@
 Instructions for configuring [Mumble↗](https://en.wikipedia.org/wiki/Mumble_%28software%29) server and client with Tor-routing in [Qubes OS↗](https://qubes-os.org). Both server and client are securely ran in separate _disposable_ [Whonix↗](https://whonix.org) Workstations.
 
 > [!IMPORTANT]
-> The Whonix version number _(currently 17)_ is liable to change. If a more recent version is available, e.g., `whonix-workstation-18-dvm`, use that instead by updating commands using the outdated reference.
+> The Whonix version number _(currently 17)_ is liable to change. If a more recent version is available, e.g., `whonix-workstation-18-dvm`, use that instead by updating commands which use the outdated reference.
 
 ## Requirements
 - 8Gb Memory _(16Gb or more recommended)_
