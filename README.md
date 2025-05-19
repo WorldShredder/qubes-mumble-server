@@ -205,21 +205,25 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     ```bash
     sudo vim /etc/mumble-server.ini
     ```
+19. [**user**@**murmurd-dvm**]() Shutdown VM
 
+    ```bash
+    sudo poweroff
+    ```
 
-19. [**user**@**dom0**]() Create Mumble Server _Named DispVM_ _(`murmurd`)_
+20. [**user**@**dom0**]() Create Mumble Server _Named DispVM_ _(`murmurd`)_
 
     ```bash
     qvm-create murmurd -t murmurd-dvm -l purple --class DispVM --prop netvm=sys-whonix
     ```
 
-20. [**user**@**dom0**]() Open a terminal in `sys-whonix`
+21. [**user**@**dom0**]() Open a terminal in `sys-whonix`
 
     ```bash
     setsid qvm-run sys-whonix xfce4-terminal &>/dev/null
     ```
 
-21. [**user**@**sys-whonix**]() Create a new hidden service in `torrc` _(user config)_
+22. [**user**@**sys-whonix**]() Create a new hidden service in `torrc` _(user config)_
 
     > <picture>
     > <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/warning.svg">
@@ -251,19 +255,19 @@ TODO: Figure out how to do this all in AppVM based on WS-17 via /rw
     EOF
     ```
 
-22. [**user**@**sys-whonix**]() Reload Tor Daemon
+23. [**user**@**sys-whonix**]() Reload Tor Daemon
 
     ```bash
     sudo systemctl reload tor
     ```
 
-23. [**user**@**sys-whonix**]() Retrieve Mumble server onion address
+24. [**user**@**sys-whonix**]() Retrieve Mumble server onion address
 
     ```bash
     sudo cat /var/lib/tor/mumble-server/hostname
     ```
 
-24. [**user**@**dom0**]() Start `murmurd` _DispVM_
+25. [**user**@**dom0**]() Start `murmurd` _DispVM_
 
     > <picture>
     >   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/note.svg">
