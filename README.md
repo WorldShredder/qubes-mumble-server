@@ -524,3 +524,4 @@ _todo: add configuration persistence steps_
 - https://www.whonix.org/wiki/Voip#Mumble_Server_Instructions
 - https://forum.qubes-os.org/t/exposing-mumble-server-running-in-qubes-using-wireguard
 - https://www.blunix.com/blog/creating-qubes-os-vms-on-the-command-line.html
+- https://github.com/Whonix/anon-gw-anonymizer-config/blob/master/usr/share/tor/tor-service-defaults-torrc.anondist
