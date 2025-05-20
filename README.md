@@ -427,7 +427,7 @@ _todo: add configuration persistence steps_
 
     - **Interface**
 
-        - `Echo Cancellation`: _Multichannel echo cancellation_
+        - `Echo Cancellation`: _Mixed echo cancellation_
 
     - **Transmission**
 
@@ -457,7 +457,14 @@ _todo: add configuration persistence steps_
 
         - `Default Jitter Buffer`: _10ms_
 
-        - `Volume`: _Recommended that you start very low and adjust users manually via right-click_
+        - `Volume`: _Recommended that you start very low (10%) and adjust volume of each user manually_
+
+            <details>
+            <summary><b>How do I adjust volume for each user?</b></summary>
+            
+            > Once you've connected to a server, `Right-Click` the user you want to adjust and select `Local Volume Adjustment`.
+            
+            </details>
 
         - `Output Delay`: _20ms-40ms_
 
@@ -485,13 +492,13 @@ _todo: add configuration persistence steps_
         >
         > While not mandatory, by not applying these proxy settings, your Mumble client will be conntected via Tor's transproxy _(127.0.0.1:9050)_ in `sys-whonix`, which means it will share a Tor circuit with other apps communicating via the transproxy.
         >
-        > Instead, an isolated _SocksPort_ can be used; in this case is the IM _(instant messanger)_ SocksPort, which isolates unique destination addresses and ports to their own circuit.
+        > Instead, an isolated _SocksPort_ can be used; in this case is the first _custom_ Whonix SocksPort _(9180)_, which isolates unique destination addresses and ports to their own circuit.
 
         - `Type`: _SOCKS5 proxy_
         
         - `Hostname`: _sys-whonix internal ip_
 
-        - `Port`: _9103 (Whonix Instant Messanger SocksPort)_
+        - `Port`: _9180 (Fully Isolated SocksPort)_
 
             <details>
             <summary><b>Where can I find the internal IP?</b></summary>
