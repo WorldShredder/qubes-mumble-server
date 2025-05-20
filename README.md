@@ -498,8 +498,6 @@ _todo: add configuration persistence steps_
         
         - `Hostname`: _sys-whonix internal ip_
 
-        - `Port`: _9180 (Fully Isolated SocksPort)_
-
             <details>
             <summary><b>Where can I find the internal IP?</b></summary>
             
@@ -515,6 +513,8 @@ _todo: add configuration persistence steps_
             >     ```
             
             </details>
+
+        - `Port`: _9180 (Fully Isolated SocksPort)_
     
     - **Privacy**
 
