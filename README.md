@@ -433,7 +433,7 @@ _todo: add configuration persistence steps_
 
         - **Amplitude**
 
-            - `Voice Hold`: _250ms_
+            - `Voice Hold`: _0.25s_
 
             - `Silence Below`: _~30% (may depend on input device)_
 
@@ -443,7 +443,7 @@ _todo: add configuration persistence steps_
 
         - `Quality`: _~13 kb/s_
 
-        - `Audio per packet`: _20ms_
+        - `Audio per packet`: _20ms-60ms (40ms may be optimal)_
 
     - **Audio Processing**
 
