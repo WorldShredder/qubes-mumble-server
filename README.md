@@ -423,6 +423,11 @@ _todo: add configuration persistence steps_
 
 ## Optimal Mumble Client Settings
 
+> [!NOTE]
+> The Mumble client config is stored in `~/.config/Mumble/Mumble.conf`. Ideally one should adjust and save their client settings, then copy the `Mumble.conf` to the `mumble-dvm` _disposable template_. This will persist your client configuration between disposable instances.
+>
+> If you wish to persist your configured servers, they are stored in `~/.local/share/Mumble`, which should also be copied to the `mumble-dvm` _disposable template_.
+
 - **Audio Input**
 
     - **Interface**
